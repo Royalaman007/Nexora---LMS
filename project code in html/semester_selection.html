@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semester Details - College Saathi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .welcome-text {
+            font-size: 1.2em;
+            color: #333;
+        }
+        .sign-out-btn {
+            padding: 8px 16px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .sign-out-btn:hover {
+            background-color: #c82333;
+        }
+        .back-button {
+            padding: 8px 16px;
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            margin-right: 20px;
+        }
+        .back-button:hover {
+            background-color: #5a6268;
+        }
+        .semester-selector {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        .semester-selector select {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .setup-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        .setup-section h2 {
+            margin-top: 0;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: bold;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .course-list {
+            margin-top: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+        .course-item {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        .course-item > div:first-child {
+            flex-grow: 1;
+            margin-right: 20px;
+        }
+        .course-item h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+            font-size: 1.2em;
+        }
+        .course-item .exam-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .course-item .exam-tag {
+            background: #e9ecef;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            color: #495057;
+            border: 1px solid #ced4da;
+            display: inline-block;
+        }
+        .course-item .button-group {
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        .course-list::-webkit-scrollbar {
+            width: 8px;
+        }
+        .course-list::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        .course-list::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+        .course-list::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        .add-btn {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .add-btn:hover {
+            background-color: #218838;
+        }
+        .remove-btn {
+            padding: 8px 16px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .remove-btn:hover {
+            background-color: #c82333;
+        }
+        .exam-btn {
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-right: 10px;
+        }
+        .exam-btn:hover {
+            background-color: #0056b3;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 8px;
+            position: relative;
+        }
+        .close-modal {
+            position: absolute;
+            right: 20px;
+            top: 10px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+        .exam-list {
+            display: flex;
+            overflow-x: auto;
+            margin-top: 15px;
+            padding-bottom: 10px;
+            gap: 10px;
+        }
+        .exam-item {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #dee2e6;
+            min-width: 200px;
+            flex-shrink: 0;
+        }
+        .exam-item span {
+            flex-grow: 1;
+            margin-right: 10px;
+        }
+        .exam-list::-webkit-scrollbar {
+            height: 8px;
+        }
+        .exam-list::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        .exam-list::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+        .exam-list::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        .save-btn {
+            padding: 12px 24px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .save-btn:hover {
+            background-color: #0056b3;
+        }
+        .exam-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .exam-tag {
+            background: #e9ecef;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            color: #495057;
+            border: 1px solid #ced4da;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="user-info">
+                <a href="index.html" class="back-button">Back to Dashboard</a>
+                <span class="welcome-text">Welcome, <span id="userName"></span>!</span>
+            </div>
+            <button onclick="signOut()" class="sign-out-btn">Sign Out</button>
+        </div>
+
+        <div class="semester-selector">
+            <h2>Select Your Current Semester</h2>
+            <select id="semesterSelect" onchange="loadSemesterCourses()">
+                <option value="">Choose Semester</option>
+                <option value="1">Semester 1</option>
+                <option value="2">Semester 2</option>
+                <option value="3">Semester 3</option>
+                <option value="4">Semester 4</option>
+                <option value="5">Semester 5</option>
+                <option value="6">Semester 6</option>
+                <option value="7">Semester 7</option>
+                <option value="8">Semester 8</option>
+            </select>
+        </div>
+
+        <div id="courseList" class="course-list"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentUser = localStorage.getItem('currentUser');
+            if (!currentUser) {
+                window.location.href = 'welcome.html';
+                return;
+            }
+
+            const user = JSON.parse(currentUser);
+            document.getElementById('userName').textContent = user.name;
+
+            // Load previously selected semester if any
+            const userSemester = localStorage.getItem(`semester_${user.id}`);
+            if (userSemester) {
+                document.getElementById('semesterSelect').value = userSemester;
+                loadSemesterCourses();
+            }
+        });
+
+        function loadSemesterCourses() {
+            const semester = document.getElementById('semesterSelect').value;
+            if (!semester) {
+                document.getElementById('courseList').innerHTML = '';
+                return;
+            }
+
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            const courseData = JSON.parse(localStorage.getItem('courseData') || '{}');
+            const examData = JSON.parse(localStorage.getItem('examData') || '{}');
+            
+            // Get courses for the user's branch and selected semester
+            const branchCourses = courseData[currentUser.branchCode]?.[semester] || [];
+            const semesterExams = examData[currentUser.branchCode]?.[semester] || {};
+
+            let html = '';
+            branchCourses.forEach(course => {
+                const courseExams = semesterExams[course.name] || [];
+                html += `
+                    <div class="course-item">
+                        <div>
+                            <h3>${course.name}</h3>
+                            <p>Credits: ${course.credits}</p>
+                            <div class="exam-tags">
+                                ${courseExams.map(exam => `
+                                    <span class="exam-tag">${exam.name} (${exam.weightage}%)</span>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            document.getElementById('courseList').innerHTML = html || '<p>No courses found for this semester.</p>';
+
+            // Save selected semester
+            localStorage.setItem(`semester_${currentUser.id}`, semester);
+        }
+
+        function signOut() {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'welcome.html';
+        }
+    </script>
+</body>
+</html> 
