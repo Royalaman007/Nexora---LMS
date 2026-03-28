@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saved Data - College Saathi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .welcome-text {
+            font-size: 1.2em;
+            color: #333;
+        }
+        .sign-out-btn {
+            padding: 8px 16px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .sign-out-btn:hover {
+            background-color: #c82333;
+        }
+        .back-button {
+            padding: 8px 16px;
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            margin-right: 20px;
+        }
+        .back-button:hover {
+            background-color: #5a6268;
+        }
+        .semester-selector {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        .semester-selector select {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .course-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .course-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .course-title {
+            font-size: 1.2em;
+            color: #333;
+            margin: 0;
+        }
+        .course-credits {
+            color: #666;
+        }
+        .marks-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #dee2e6;
+        }
+        .marks-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .marks-title {
+            font-weight: bold;
+            color: #333;
+        }
+        .total-marks {
+            font-size: 1.1em;
+            color: #28a745;
+            font-weight: bold;
+        }
+        .exam-list {
+            margin-top: 15px;
+        }
+        .exam-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #dee2e6;
+        }
+        .exam-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .exam-type {
+            font-weight: bold;
+            color: #333;
+        }
+        .exam-weightage {
+            color: #666;
+        }
+        .marks-input {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .marks-input input {
+            width: 80px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .marks-input span {
+            color: #666;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        .progress-fill {
+            height: 100%;
+            background-color: #28a745;
+            transition: width 0.3s ease;
+        }
+        .progress-text {
+            text-align: center;
+            margin-top: 5px;
+            color: #666;
+        }
+        .save-btn {
+            padding: 8px 16px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+        .save-btn:hover {
+            background-color: #218838;
+        }
+        .print-btn {
+            padding: 12px 24px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            margin-top: 20px;
+        }
+        .print-btn:hover {
+            background-color: #218838;
+        }
+        .cgpa-display {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .cgpa-value {
+            font-size: 2em;
+            color: #28a745;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .cgpa-label {
+            color: #666;
+            font-size: 1.2em;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
+            margin-top: 40px;
+            border-radius: 10px;
+        }
+        .footer .copyright {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        .footer .developer {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 15px;
+        }
+        .social-links a {
+            color: #666;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: color 0.3s;
+        }
+        .social-links a:hover {
+            color: #007bff;
+        }
+        .social-links img {
+            width: 24px;
+            height: 24px;
+        }
+        @media print {
+            .no-print {
+                display: none;
+            }
+            .container {
+                max-width: 800px;
+                margin: 20px auto;
+                padding: 20px;
+                font-family: Arial, sans-serif;
+            }
+            .transcript-header {
+                text-align: center;
+                margin-bottom: 20px;
+                position: relative;
+            }
+            .transcript-header img {
+                width: 80px;
+                height: 80px;
+                position: absolute;
+                left: 20px;
+                top: 0;
+            }
+            .transcript-header h2 {
+                margin: 0;
+                font-size: 18px;
+                color: #000;
+            }
+            .transcript-header .college-name {
+                font-size: 16px;
+                margin: 5px 0;
+                color: #000;
+            }
+            .transcript-header .office-info {
+                font-size: 12px;
+                margin: 5px 0;
+                color: #000;
+            }
+            .transcript-header .contact-info {
+                font-size: 12px;
+                margin: 5px 0;
+                color: #000;
+            }
+            .qr-code {
+                text-align: center;
+                margin: 20px 0;
+            }
+            .student-info {
+                width: 100%;
+                border-collapse: collapse;
+                margin: 20px 0;
+            }
+            .student-info td {
+                padding: 5px;
+                border: 1px solid #000;
+            }
+            .student-info td:first-child {
+                width: 120px;
+                font-weight: bold;
+            }
+            .transcript-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin: 20px 0;
+                font-size: 14px;
+            }
+            .transcript-table th, .transcript-table td {
+                border: 1px solid #000;
+                padding: 8px;
+                text-align: center;
+            }
+            .transcript-table th {
+                background-color: #fff;
+                font-weight: bold;
+            }
+            .footer-info {
+                margin-top: 30px;
+                font-size: 12px;
+            }
+            .footer-info p {
+                margin: 5px 0;
+            }
+            .signature-section {
+                margin-top: 50px;
+                text-align: right;
+            }
+            .signature-section p {
+                margin: 5px 0;
+            }
+            .verification-info {
+                margin-top: 20px;
+                font-size: 12px;
+                margin-bottom: 30px;
+            }
+            .copyright {
+                text-align: center;
+                font-size: 11px;
+                color: #666;
+                border-top: 1px solid #ccc;
+                padding-top: 10px;
+                margin-top: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div>
+                <a href="index.html" class="back-button">← Back to Dashboard</a>
+                <span class="welcome-text">Welcome, <span id="userName"></span>!</span>
+            </div>
+            <button onclick="signOut()" class="sign-out-btn">Sign Out</button>
+        </div>
+
+        <div class="semester-selector">
+            <h2>Select Semester</h2>
+            <select id="semesterSelect" onchange="handleSemesterChange()">
+                <option value="">Choose a semester</option>
+                <script>
+                    for (let i = 1; i <= 8; i++) {
+                        document.write(`<option value="${i}">Semester ${i}</option>`);
+                    }
+                </script>
+            </select>
+        </div>
+
+        <div class="cgpa-display no-print">
+            <div class="cgpa-label">Current CGPA</div>
+            <div class="cgpa-value" id="cgpaDisplay">0.00</div>
+        </div>
+
+        <div id="coursesContainer"></div>
+
+        <button onclick="printTranscript()" class="print-btn no-print">Print Transcript</button>
+
+        <div class="footer no-print">
+            <div class="copyright">Copyright © 2025 Aman Akash (2401ME04). All rights reserved.</div>
+            <div class="developer">Developed with ❤️ by Aman Akash | Indian Institute of Technology Patna</div>
+            <div class="social-links">
+                <a href="https://www.instagram.com/aman__akash__/" target="_blank">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/9/95/Instagram_logo_2022.svg" alt="Instagram">
+                    Follow on Instagram
+                </a>
+                <a href="https://www.linkedin.com/in/amanakash007" target="_blank">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn">
+                    Connect on LinkedIn
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentData = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentUser = localStorage.getItem('currentUser');
+            if (!currentUser) {
+                window.location.href = 'welcome.html';
+                return;
+            }
+            
+            const user = JSON.parse(currentUser);
+            document.getElementById('userName').textContent = user.name;
+
+            // Set initial semester if exists
+            const semester = localStorage.getItem('selectedSemester');
+            if (semester) {
+                document.getElementById('semesterSelect').value = semester;
+                loadData();
+            }
+        });
+
+        function signOut() {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'welcome.html';
+        }
+
+        function handleSemesterChange() {
+            const semester = document.getElementById('semesterSelect').value;
+            if (semester) {
+                localStorage.setItem('selectedSemester', semester);
+                loadData();
+            }
+        }
+
+        function loadData() {
+            const course = localStorage.getItem('currentCourse');
+            const semester = document.getElementById('semesterSelect').value;
+            const savedData = localStorage.getItem(`${course}_semester_${semester}`);
+            
+            if (savedData) {
+                currentData = JSON.parse(savedData);
+                if (!currentData.marks) {
+                    currentData.marks = {};
+                }
+                displayCourses();
+                updateCGPADisplay();
+            } else {
+                currentData = null;
+                document.getElementById('coursesContainer').innerHTML = '<p>No data found for this semester.</p>';
+                document.getElementById('cgpaDisplay').textContent = "0.00";
+            }
+        }
+
+        function displayCourses() {
+            if (!currentData) return;
+
+            const container = document.getElementById('coursesContainer');
+            container.innerHTML = currentData.courses.map((course, courseIndex) => `
+                <div class="course-section">
+                    <div class="course-header">
+                        <div>
+                            <h3 class="course-title">${course.name}</h3>
+                            <span class="course-credits">${course.credits} credits</span>
+                        </div>
+                    </div>
+                    <div class="marks-section">
+                        <div class="marks-header">
+                            <span class="marks-title">Marks</span>
+                            <span class="total-marks">${calculateTotalMarks(courseIndex)}/100</span>
+                        </div>
+                        <div class="exam-list">
+                            ${course.exams.map((exam, examIndex) => {
+                                const markKey = `${courseIndex}_${examIndex}`;
+                                const currentMark = currentData.marks[markKey] || '';
+                                return `
+                                    <div class="exam-item">
+                                        <div class="exam-header">
+                                            <span class="exam-type">${exam.type}</span>
+                                            <span class="exam-weightage">${exam.weightage}%</span>
+                                        </div>
+                                        <div class="marks-input">
+                                            <input type="number" 
+                                                   min="0" 
+                                                   max="100" 
+                                                   value="${currentMark}"
+                                                   onchange="updateMark(${courseIndex}, ${examIndex}, this.value)"
+                                                   placeholder="Enter marks">
+                                            <span>/ 100</span>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function calculateTotalMarks(courseIndex) {
+            if (!currentData || !currentData.marks) return 0;
+
+            const course = currentData.courses[courseIndex];
+            let totalWeightedMarks = 0;
+            let totalWeightage = 0;
+
+            course.exams.forEach((exam, examIndex) => {
+                const markKey = `${courseIndex}_${examIndex}`;
+                const marks = currentData.marks[markKey];
+                if (marks !== undefined && marks !== '') {
+                    totalWeightedMarks += (parseFloat(marks) * exam.weightage / 100);
+                    totalWeightage += exam.weightage;
+                }
+            });
+
+            return totalWeightage > 0 ? Math.round(totalWeightedMarks) : 0;
+        }
+
+        function calculateGradePoints(percentage) {
+            if (percentage >= 91) return 10;
+            if (percentage >= 81) return 9;
+            if (percentage >= 71) return 8;
+            if (percentage >= 61) return 7;
+            if (percentage >= 51) return 6;
+            if (percentage >= 41) return 5;
+            if (percentage >= 31) return 4;
+            return 0;
+        }
+
+        function calculateCGPA() {
+            if (!currentData || !currentData.courses) return 0;
+
+            let totalCredits = 0;
+            let totalGradePoints = 0;
+
+            currentData.courses.forEach((course, courseIndex) => {
+                const totalMarks = calculateTotalMarks(courseIndex);
+                const gradePoints = calculateGradePoints(totalMarks);
+                totalGradePoints += gradePoints * course.credits;
+                totalCredits += parseInt(course.credits);
+            });
+
+            return totalCredits > 0 ? (totalGradePoints / totalCredits).toFixed(2) : "0.00";
+        }
+
+        function updateCGPADisplay() {
+            const cgpa = calculateCGPA();
+            document.getElementById('cgpaDisplay').textContent = cgpa;
+        }
+
+        function updateMark(courseIndex, examIndex, value) {
+            const markKey = `${courseIndex}_${examIndex}`;
+            
+            if (value === '' || (parseFloat(value) >= 0 && parseFloat(value) <= 100)) {
+                currentData.marks[markKey] = value;
+                
+                const course = localStorage.getItem('currentCourse');
+                const semester = document.getElementById('semesterSelect').value;
+                localStorage.setItem(`${course}_semester_${semester}`, JSON.stringify(currentData));
+                
+                const totalMarksElement = document.querySelector(`#coursesContainer .course-section:nth-child(${courseIndex + 1}) .total-marks`);
+                if (totalMarksElement) {
+                    totalMarksElement.textContent = `${calculateTotalMarks(courseIndex)}/100`;
+                }
+                
+                // Update CGPA after marks change
+                updateCGPADisplay();
+            }
+        }
+
+        function calculateGrade(percentage) {
+            if (percentage >= 91) return 'AA';
+            if (percentage >= 81) return 'AB';
+            if (percentage >= 71) return 'BB';
+            if (percentage >= 61) return 'BC';
+            if (percentage >= 51) return 'CC';
+            if (percentage >= 41) return 'CD';
+            if (percentage >= 31) return 'DD';
+            return 'FF';
+        }
+
+        function printTranscript() {
+            const originalContent = document.body.innerHTML;
+            const course = localStorage.getItem('currentCourse');
+            const semester = document.getElementById('semesterSelect').value;
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+
+            let transcriptContent = `
+                <div class="container">
+                    <div class="transcript-header">
+                        <img src="college_logo.png" alt="College Logo">
+                        <h2>Office of the Dean, Academic Affairs</h2>
+                        <p class="college-name">Indian Institute of Technology Patna</p>
+                        <p class="office-info">Administrative Building, 1st Floor (R. No. 105), IIT Floor (R. No. 301)</p>
+                        <p class="office-info">Main Road Bihta, Patna, Bihar, 801103, INDIA</p>
+                        <p class="contact-info">☎ +91 6115 233 6991 📠 +91 99947 77001 ✉ +91 99947 77001</p>
+                        <p class="contact-info">📧 info@iitp.ac.in, academics@iitp.ac.in</p>
+                    </div>
+
+                    <div class="qr-code">
+                        <p>Semester-${semester} Transcript</p>
+                        <!-- Add QR code image here if needed -->
+                    </div>
+
+                    <table class="student-info">
+                        <tr>
+                            <td>Student Name</td>
+                            <td>${user.name}</td>
+                            <td>Date of Birth</td>
+                            <td>${user.dob || 'Not specified'}</td>
+                        </tr>
+                        <tr>
+                            <td>Program</td>
+                            <td>${getCourseFullName(course)}</td>
+                            <td>Roll No.</td>
+                            <td>${user.rollNo || 'Not specified'}</td>
+                        </tr>
+                    </table>
+
+                    <table class="transcript-table">
+                        <thead>
+                            <tr>
+                                <th>Course Code</th>
+                                <th>Course Name</th>
+                                <th>L-T-P</th>
+                                <th>Credits Taken</th>
+                                <th>Credits Earned</th>
+                                <th>Grade</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${currentData.courses.map((course, courseIndex) => {
+                                const totalMarks = calculateTotalMarks(courseIndex);
+                                const grade = calculateGrade(totalMarks);
+                                return `
+                                    <tr>
+                                        <td>${course.code || '-'}</td>
+                                        <td style="text-align: left">${course.name}</td>
+                                        <td>${course.ltp || '3-1-0'}</td>
+                                        <td>${course.credits}</td>
+                                        <td>${grade !== 'FF' ? course.credits : '0'}</td>
+                                        <td>${grade}</td>
+                                    </tr>
+                                `;
+                            }).join('')}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3">Credits Attempted</td>
+                                <td>${calculateTotalCredits()}</td>
+                                <td>${calculateEarnedCredits()}</td>
+                                <td>SPI: ${calculateSPI()}</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                    <div class="footer-info">
+                        <p>Note: '*' indicates F grade in the respective course</p>
+                        <p>Place of Issue: Indian Institute of Technology Patna</p>
+                        <p>Date of Issue: ${new Date().toLocaleDateString('en-IN')}</p>
+                    </div>
+
+                    <div class="signature-section">
+                        <p>(Assistant Registrar, Academic)</p>
+                    </div>
+
+                    <div class="verification-info">
+                        <p>Verification Link: https://academic.iitp.ac.in/verify</p>
+                        <p>Access Code: ${generateAccessCode()}</p>
+                    </div>
+
+                    <div class="copyright">
+                        <p>Copyright © 2025 Aman Akash (2401ME04). All rights reserved.</p>
+                        <p>Developed with ❤️ by Aman Akash | Indian Institute of Technology Patna</p>
+                        <p>Follow us: 
+                            <a href="https://www.instagram.com/aman__akash__/" target="_blank">Instagram</a> | 
+                            <a href="https://www.linkedin.com/in/amanakash007" target="_blank">LinkedIn</a>
+                        </p>
+                    </div>
+                </div>
+            `;
+
+            document.body.innerHTML = transcriptContent;
+            window.print();
+            document.body.innerHTML = originalContent;
+
+            document.addEventListener('DOMContentLoaded', function() {
+                const semester = localStorage.getItem('selectedSemester');
+                if (semester) {
+                    document.getElementById('semesterSelect').value = semester;
+                    loadData();
+                }
+            });
+        }
+
+        function calculateTotalCredits() {
+            return currentData.courses.reduce((total, course) => total + parseInt(course.credits), 0);
+        }
+
+        function calculateEarnedCredits() {
+            return currentData.courses.reduce((total, course, index) => {
+                const grade = calculateGrade(calculateTotalMarks(index));
+                return total + (grade !== 'FF' ? parseInt(course.credits) : 0);
+            }, 0);
+        }
+
+        function calculateSPI() {
+            let totalPoints = 0;
+            let totalCredits = 0;
+
+            currentData.courses.forEach((course, index) => {
+                const totalMarks = calculateTotalMarks(index);
+                const gradePoints = calculateGradePoints(totalMarks);
+                totalPoints += gradePoints * parseInt(course.credits);
+                totalCredits += parseInt(course.credits);
+            });
+
+            return totalCredits > 0 ? (totalPoints / totalCredits).toFixed(2) : "0.00";
+        }
+
+        function generateAccessCode() {
+            return 'xxxxxxxxABCD'.replace(/[x]/g, () => 
+                '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'[Math.floor(Math.random() * 36)]
+            );
+        }
+
+        function getCourseFullName(courseCode) {
+            switch(courseCode) {
+                case 'btech': return 'Bachelor of Technology (B.Tech/BE)';
+                case 'bsc': return 'Bachelor of Science (B.Sc)';
+                case 'mbbs': return 'Bachelor of Medicine and Bachelor of Surgery (MBBS)';
+                default: return courseCode;
+            }
+        }
+    </script>
+</body>
+</html> 

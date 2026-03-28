@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexora - Authentication</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 400px;
+            width: 100%;
+            padding: 20px;
+        }
+        .auth-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            cursor: pointer;
+            color: #666;
+            transition: all 0.3s;
+        }
+        .tab.active {
+            color: #007bff;
+            border-bottom: 2px solid #007bff;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        .submit-btn:hover {
+            background-color: #0069d9;
+        }
+        .form {
+            display: none;
+        }
+        .form.active {
+            display: block;
+        }
+        .auth-links {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .auth-links a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .auth-links a:hover {
+            text-decoration: underline;
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .logo h1 {
+            color: #333;
+            margin: 0;
+            font-size: 24px;
+        }
+        .logo p {
+            color: #666;
+            margin: 5px 0 0 0;
+            font-size: 14px;
+        }
+        .error-message {
+            color: #dc3545;
+            margin-top: 5px;
+            font-size: 14px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="auth-container">
+            <div class="logo">
+                <h1>Nexora</h1>
+                <p>The next era of education</p>
+            </div>
+            
+            <div class="tabs">
+                <div class="tab active" onclick="switchTab('signin')">Sign In</div>
+                <div class="tab" onclick="switchTab('signup')">Register</div>
+            </div>
+            
+            <!-- Sign In Form -->
+            <form id="signinForm" class="form active" onsubmit="handleSignIn(event)">
+                <div class="form-group">
+                    <label for="signinEmail">Email</label>
+                    <input type="email" id="signinEmail" required placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label for="signinPassword">Password</label>
+                    <input type="password" id="signinPassword" required placeholder="Enter your password">
+                </div>
+                <button type="submit" class="submit-btn">Sign In</button>
+                <div class="error-message" id="signinError"></div>
+            </form>
+            
+            <!-- Sign Up Form -->
+            <form id="signupForm" class="form" onsubmit="handleSignUp(event)">
+                <div class="form-group">
+                    <label for="signupName">Full Name</label>
+                    <input type="text" id="signupName" required placeholder="Enter your full name">
+                </div>
+                <div class="form-group">
+                    <label for="signupEmail">Email</label>
+                    <input type="email" id="signupEmail" required placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword">Password</label>
+                    <input type="password" id="signupPassword" required placeholder="Create a password">
+                </div>
+                <div class="form-group">
+                    <label for="signupBranch">Branch</label>
+                    <select id="signupBranch" required>
+                        <option value="">Select your branch</option>
+                        <option value="CSE">Computer Science Engineering</option>
+                        <option value="MECH">Mechanical Engineering</option>
+                        <option value="EEE">Electrical Engineering</option>
+                        <option value="CIVIL">Civil Engineering</option>
+                        <option value="CHEM">Chemical Engineering</option>
+                    </select>
+                </div>
+                <button type="submit" class="submit-btn">Register</button>
+                <div class="error-message" id="signupError"></div>
+            </form>
+            
+            <div class="auth-links">
+                <a href="welcome.html">Back to Home</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tab) {
+            // Update active tab
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelector(`.tab:nth-child(${tab === 'signin' ? 1 : 2})`).classList.add('active');
+            
+            // Update active form
+            document.querySelectorAll('.form').forEach(f => f.classList.remove('active'));
+            document.getElementById(`${tab}Form`).classList.add('active');
+            
+            // Clear error messages
+            document.querySelectorAll('.error-message').forEach(e => e.style.display = 'none');
+        }
+        
+        function handleSignIn(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('signinEmail').value;
+            const password = document.getElementById('signinPassword').value;
+            
+            // Get users from localStorage
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            console.log('Attempting to sign in with:', { email, password });
+            console.log('Available users:', users);
+            
+            // Find user by email first
+            const user = users.find(u => u.email === email);
+            
+            if (user && user.password === password) {
+                console.log('User found:', user);
+                
+                // Store the COMPLETE user object in currentUser
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                console.log('Stored current user:', user);
+                
+                window.location.href = 'index.html';
+            } else {
+                console.log('No matching user found or password incorrect');
+                const errorElement = document.getElementById('signinError');
+                errorElement.textContent = 'Invalid email or password';
+                errorElement.style.display = 'block';
+            }
+        }
+        
+        function handleSignUp(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const branch = document.getElementById('signupBranch').value;
+            
+            // Get existing users from localStorage
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            
+            // Check if email already exists
+            if (users.some(user => user.email === email)) {
+                alert('Email already registered. Please use a different email or login.');
+                return;
+            }
+            
+            // Create new user object
+            const newUser = {
+                id: Date.now().toString(),
+                name,
+                email,
+                password,
+                branchCode: branch,
+                groupCode: branch, // For backward compatibility
+                enrollment: {
+                    program: branch,
+                    academicYear: new Date().getFullYear().toString(),
+                    course: 'B.Tech'
+                },
+                isAdmin: false
+            };
+            
+            // Add new user to users array
+            users.push(newUser);
+            
+            // Save updated users array to localStorage
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            // Show success message
+            alert('Registration successful! Please login.');
+            
+            // Switch to login form
+            document.querySelector('.login-form').style.display = 'block';
+            document.querySelector('.signup-form').style.display = 'none';
+        }
+    </script>
+</body>
+</html> 

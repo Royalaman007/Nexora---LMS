@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Saathi - My Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-radius: 10px;
+        }
+        .back-btn {
+            padding: 8px 16px;
+            background-color: #6c757d;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .back-btn:hover {
+            background-color: #5a6268;
+        }
+        .profile-section {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        .avatar {
+            width: 100px;
+            height: 100px;
+            background-color: #007bff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 40px;
+        }
+        .profile-info h1 {
+            margin: 0;
+            color: #333;
+        }
+        .profile-info p {
+            margin: 5px 0;
+            color: #666;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .info-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #eee;
+        }
+        .info-card h3 {
+            margin: 0 0 15px 0;
+            color: #333;
+            font-size: 18px;
+        }
+        .info-item {
+            margin-bottom: 15px;
+        }
+        .info-item label {
+            display: block;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        .info-item span {
+            color: #333;
+            font-weight: 500;
+        }
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .status-active {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .enrollment-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #eee;
+        }
+        .enrollment-section h3 {
+            margin: 0 0 15px 0;
+            color: #333;
+            font-size: 18px;
+        }
+        .enrollment-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 500;
+        }
+        .form-group select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: white;
+            font-size: 14px;
+        }
+        .save-btn {
+            padding: 8px 16px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+        .save-btn:hover {
+            background-color: #218838;
+        }
+        .enrollment-info {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e9ecef;
+            border-radius: 4px;
+            display: none;
+        }
+        .enrollment-info.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>My Profile</h1>
+            <a href="index.html" class="back-btn">Back to Dashboard</a>
+        </div>
+
+        <div class="profile-section">
+            <div class="profile-header">
+                <div class="avatar">👤</div>
+                <div class="profile-info">
+                    <h1 id="profileName">Loading...</h1>
+                    <p id="profileEmail">Loading...</p>
+                </div>
+            </div>
+
+            <div class="enrollment-section">
+                <h3>Course Enrollment</h3>
+                <div class="enrollment-form">
+                    <div class="form-group">
+                        <label for="program">Program</label>
+                        <select id="program" onchange="updateAcademicYears()">
+                            <option value="">Select Program</option>
+                            <option value="btech">B.Tech</option>
+                            <option value="bsc">B.Sc</option>
+                            <option value="mtech">M.Tech</option>
+                            <option value="phd">PhD</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="academicYear">Academic Year</label>
+                        <select id="academicYear">
+                            <option value="">Select Academic Year</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="course">Course</label>
+                        <select id="course">
+                            <option value="">Select Course</option>
+                        </select>
+                    </div>
+                </div>
+                <button onclick="saveEnrollment()" class="save-btn">Save Enrollment</button>
+                <div id="enrollmentInfo" class="enrollment-info">
+                    <p>Your enrollment has been saved successfully!</p>
+                </div>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3>Academic Information</h3>
+                    <div class="info-item">
+                        <label>Program</label>
+                        <span id="programInfo">Loading...</span>
+                    </div>
+                    <div class="info-item">
+                        <label>Academic Year</label>
+                        <span id="academicYearInfo">Loading...</span>
+                    </div>
+                    <div class="info-item">
+                        <label>Course</label>
+                        <span id="courseInfo">Loading...</span>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <h3>Group Information</h3>
+                    <div class="info-item">
+                        <label>Group Code</label>
+                        <span id="groupCodeInfo">Loading...</span>
+                    </div>
+                    <div class="info-item">
+                        <label>Group Size</label>
+                        <span id="groupSize">Loading...</span>
+                    </div>
+                    <div class="info-item">
+                        <label>Group Status</label>
+                        <span class="status-badge status-active">Active</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+        
+        if (!currentUser.id) {
+            window.location.href = 'welcome.html';
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load user profile information
+            document.getElementById('profileName').textContent = currentUser.name;
+            document.getElementById('profileEmail').textContent = currentUser.email;
+            document.getElementById('groupCodeInfo').textContent = currentUser.groupCode || 'Not Assigned';
+            
+            // Load saved enrollment data
+            loadSavedEnrollment();
+            
+            // Initialize academic years based on program
+            updateAcademicYears();
+            
+            // Update group size
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const groupSize = users.filter(u => u.groupCode === currentUser.groupCode).length;
+            document.getElementById('groupSize').textContent = groupSize || '0';
+        });
+
+        function loadSavedEnrollment() {
+            const enrollment = currentUser.enrollment || {};
+            
+            // Set program
+            const programSelect = document.getElementById('program');
+            if (enrollment.program) {
+                programSelect.value = enrollment.program;
+                updateAcademicYears();
+            }
+            
+            // Set academic year
+            const academicYearSelect = document.getElementById('academicYear');
+            if (enrollment.academicYear) {
+                academicYearSelect.value = enrollment.academicYear;
+                updateCourses();
+            }
+            
+            // Set course
+            const courseSelect = document.getElementById('course');
+            if (enrollment.course) {
+                courseSelect.value = enrollment.course;
+            }
+            
+            // Update info display
+            updateEnrollmentInfo();
+        }
+
+        function updateAcademicYears() {
+            const program = document.getElementById('program').value;
+            const academicYearSelect = document.getElementById('academicYear');
+            academicYearSelect.innerHTML = '<option value="">Select Academic Year</option>';
+            
+            if (program === 'btech') {
+                // Add BTech batches from 2020 to 2024
+                for (let year = 2020; year <= 2024; year++) {
+                    const option = document.createElement('option');
+                    option.value = `${year}-${year + 4}`;
+                    option.textContent = `${year}-${year + 4}`;
+                    academicYearSelect.appendChild(option);
+                }
+            } else if (program === 'mtech') {
+                // Add MTech batches from 2022 to 2024
+                for (let year = 2022; year <= 2024; year++) {
+                    const option = document.createElement('option');
+                    option.value = `${year}-${year + 2}`;
+                    option.textContent = `${year}-${year + 2}`;
+                    academicYearSelect.appendChild(option);
+                }
+            } else if (program === 'phd') {
+                // Add PhD batches from 2020 to 2024
+                for (let year = 2020; year <= 2024; year++) {
+                    const option = document.createElement('option');
+                    option.value = `${year}`;
+                    option.textContent = `${year}`;
+                    academicYearSelect.appendChild(option);
+                }
+            }
+            
+            // If there's saved enrollment data, select it
+            if (currentUser.enrollment && currentUser.enrollment.academicYear) {
+                academicYearSelect.value = currentUser.enrollment.academicYear;
+            }
+            
+            updateCourses();
+        }
+
+        function updateCourses() {
+            const program = document.getElementById('program').value;
+            const courseSelect = document.getElementById('course');
+            courseSelect.innerHTML = '<option value="">Select Course</option>';
+            
+            if (program === 'btech') {
+                const courses = ['Computer Science', 'Mechanical Engineering', 'Electrical Engineering', 'Civil Engineering', 'Chemical Engineering'];
+                courses.forEach(course => {
+                    const option = document.createElement('option');
+                    option.value = course;
+                    option.textContent = course;
+                    courseSelect.appendChild(option);
+                });
+            } else if (program === 'mtech') {
+                const courses = ['Computer Science', 'Mechanical Engineering', 'Electrical Engineering', 'Civil Engineering', 'Chemical Engineering'];
+                courses.forEach(course => {
+                    const option = document.createElement('option');
+                    option.value = course;
+                    option.textContent = course;
+                    courseSelect.appendChild(option);
+                });
+            } else if (program === 'phd') {
+                const courses = ['Computer Science', 'Mechanical Engineering', 'Electrical Engineering', 'Civil Engineering', 'Chemical Engineering'];
+                courses.forEach(course => {
+                    const option = document.createElement('option');
+                    option.value = course;
+                    option.textContent = course;
+                    courseSelect.appendChild(option);
+                });
+            }
+            
+            // If there's saved enrollment data, select it
+            if (currentUser.enrollment && currentUser.enrollment.course) {
+                courseSelect.value = currentUser.enrollment.course;
+            }
+        }
+
+        function saveEnrollment() {
+            const program = document.getElementById('program').value;
+            const academicYear = document.getElementById('academicYear').value;
+            const course = document.getElementById('course').value;
+            
+            if (!program || !academicYear || !course) {
+                alert('Please fill in all enrollment details');
+                return;
+            }
+            
+            // Get current user
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) {
+                alert('Please sign in to save enrollment');
+                return;
+            }
+            
+            // Update enrollment data
+            currentUser.enrollment = {
+                program,
+                academicYear,
+                course
+            };
+            
+            // Update current user in localStorage
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            
+            // Update user in users array
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const userIndex = users.findIndex(u => u.email === currentUser.email);
+            if (userIndex !== -1) {
+                users[userIndex] = currentUser;
+                localStorage.setItem('users', JSON.stringify(users));
+            }
+            
+            // Show success message
+            const enrollmentInfo = document.getElementById('enrollmentInfo');
+            enrollmentInfo.classList.add('show');
+            setTimeout(() => {
+                enrollmentInfo.classList.remove('show');
+            }, 3000);
+            
+            // Update display
+            updateEnrollmentInfo();
+        }
+
+        function updateEnrollmentInfo() {
+            const enrollment = currentUser.enrollment || {};
+            
+            document.getElementById('programInfo').textContent = enrollment.program ? enrollment.program.toUpperCase() : 'Not Set';
+            document.getElementById('academicYearInfo').textContent = enrollment.academicYear || 'Not Set';
+            document.getElementById('courseInfo').textContent = enrollment.course || 'Not Set';
+        }
+    </script>
+</body>
+</html> 

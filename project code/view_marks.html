@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Marks - College Saathi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .back-btn {
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .back-btn:hover {
+            background-color: #0056b3;
+        }
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .semester-card {
+            margin-bottom: 20px;
+        }
+        .semester-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .subject-list {
+            display: grid;
+            gap: 15px;
+        }
+        .subject-item {
+            display: flex;
+            flex-direction: column;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        .subject-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .exam-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .exam-item {
+            background-color: #fff;
+            padding: 8px 12px;
+            border-radius: 4px;
+            border: 1px solid #dee2e6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .exam-name {
+            color: #495057;
+        }
+        .exam-mark {
+            font-weight: bold;
+            color: #28a745;
+        }
+        .exam-mark.not-graded {
+            color: #dc3545;
+        }
+        .total-marks {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #dee2e6;
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+        }
+        .subject-name {
+            font-weight: bold;
+        }
+        .credits {
+            color: #666;
+        }
+        .marks {
+            font-weight: bold;
+            color: #28a745;
+        }
+        .no-marks {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>My Marks</h1>
+            <a href="index.html" class="back-btn">Back to Dashboard</a>
+        </div>
+
+        <div id="marksContainer">
+            <!-- Marks will be displayed here -->
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+            if (!currentUser.id) {
+                window.location.href = 'welcome.html';
+                return;
+            }
+
+            // Get user's semester
+            const userSemester = localStorage.getItem(`semester_${currentUser.id}`);
+            if (!userSemester) {
+                window.location.href = 'semester_selection.html';
+                return;
+            }
+
+            const courseData = JSON.parse(localStorage.getItem('courseData') || '{}');
+            const examData = JSON.parse(localStorage.getItem('examData') || '{}');
+            const studentMarks = JSON.parse(localStorage.getItem('studentMarks') || '{}');
+
+            if (!courseData[currentUser.branchCode]) {
+                document.getElementById('marksContainer').innerHTML = `
+                    <div class="card">
+                        <p class="no-marks">No course details available for your branch.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let marksHtml = '';
+            const branchCourses = courseData[currentUser.branchCode][userSemester] || [];
+            const branchExams = examData[currentUser.branchCode]?.[userSemester] || {};
+            const userMarks = studentMarks[currentUser.id]?.[userSemester] || {};
+
+            if (branchCourses.length === 0) {
+                document.getElementById('marksContainer').innerHTML = `
+                    <div class="card">
+                        <p class="no-marks">No courses found for your current semester.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            marksHtml = `
+                <div class="card semester-card">
+                    <div class="semester-header">
+                        <h2>Semester ${userSemester}</h2>
+                    </div>
+                    <div class="subject-list">
+            `;
+
+            branchCourses.forEach(subject => {
+                const subjectExams = branchExams[subject.name] || [];
+                const subjectMarks = userMarks[subject.name] || {};
+                let totalMarks = 0;
+                let totalWeightage = 0;
+
+                marksHtml += `
+                    <div class="subject-item">
+                        <div class="subject-header">
+                            <div class="subject-name">${subject.name}</div>
+                            <div class="credits">${subject.credits} credits</div>
+                        </div>
+                        <div class="exam-list">
+                `;
+
+                subjectExams.forEach(exam => {
+                    const mark = subjectMarks[exam.name];
+                    if (mark !== undefined) {
+                        totalMarks += mark;
+                        totalWeightage += exam.weightage;
+                    }
+
+                    marksHtml += `
+                        <div class="exam-item">
+                            <span class="exam-name">${exam.name}</span>
+                            <span class="exam-mark ${mark === undefined ? 'not-graded' : ''}">
+                                ${mark !== undefined ? mark : 'Not Graded'} / ${exam.weightage}
+                            </span>
+                        </div>
+                    `;
+                });
+
+                marksHtml += `
+                        </div>
+                        <div class="total-marks">
+                            <span>Total</span>
+                            <span>${totalMarks} / ${totalWeightage}</span>
+                        </div>
+                    </div>
+                `;
+            });
+
+            marksHtml += `
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('marksContainer').innerHTML = marksHtml;
+        });
+    </script>
+</body>
+</html> 
